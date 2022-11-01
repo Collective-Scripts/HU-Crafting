@@ -384,7 +384,7 @@ CreateThread(function()
                 coords = vec3(data.CraftData.craft_table_coords.x, data.CraftData.craft_table_coords.y, data.CraftData.craft_table_coords.z),
                 size = vec3(2, 2.5, 2),
                 rotation = data.CraftData.craft_table_coords.w,
-                debug = true,
+                debug = false,
                 onEnter = onEnter,
                 onExit = onExit,
                 method = 'text',

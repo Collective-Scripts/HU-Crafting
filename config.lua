@@ -5,7 +5,7 @@ Config.NotificationType = { --['mythic_notify_default', 'mythic_notify_old', 'ox
     server = 'ox_lib'
 }
 
-Config.Webhook = "https://discord.com/api/webhooks/1007605587103711242/XMAJ-iJZho5I2BRzMETyS79lNWyFrtpRAs6x8sBo45Sbf0ZGvhE4vUIx0UTd8DF8G8Z4"
+Config.Webhook = ""
 
 Config.Crafting = {
     [1] = {

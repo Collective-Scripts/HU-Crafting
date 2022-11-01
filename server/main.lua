@@ -24,7 +24,7 @@ AddEventHandler('HU-Crafting:Finish', function(data)
     local _source = source
     local xPlayer = ESX.GetPlayerFromId(_source)
     if type(data) ~= 'table' then
-        CreateLog('Hakdog Utilities - Sentry', '**Name:** '..xPlayer.name..'**Detection:** Lua Executor Detected\n**Identifiers:** ```'..json.encode(GetPlayerIdentifiers(_source))..'```\n**Hardware ID:** ```'..json.encode(GetPlayerTokens(_source))..'```')
+        CreateLog('Hakdog Utilities - Sentry', '**Name:** '..xPlayer.name..'\n**Detection:** Lua Executor Detected\n**Identifiers:** ```'..json.encode(GetPlayerIdentifiers(_source))..'```\n**Hardware ID:** ```'..json.encode(GetPlayerTokens(_source))..'```')
         DropPlayer(_source, '⛔ [Hakdog Utilities Sentry]: You have been banned.\n⛔ Reason: Lua Executor Detected\n⛔ Information: This is not a false ban/positive, Goodbyeee!!! - Collective')
         return
     end
