@@ -7,7 +7,6 @@ function DrawText3D(x, y, z, text)
     SetTextFont(4)
     SetTextProportional(1)
     SetTextColour(255, 255, 255, 215)
-
     SetTextEntry("STRING")
     SetTextCentre(1)
     AddTextComponentString(text)
@@ -18,7 +17,10 @@ end
 
 function createProp(prop)
     local ped = PlayerPedId()
-    lib.requestModel(prop.model)
+    RequestModel(prop.model)
+    while not HasModelLoaded(prop.model) do
+        Wait(0)
+    end
     local coords = GetEntityCoords(ped)
     local object = CreateObject(prop.model, coords.x, coords.y, coords.z, true, true, true)
     AttachEntityToEntity(object, ped, GetPedBoneIndex(ped, prop.bone or 60309), prop.pos.x, prop.pos.y, prop.pos.z, prop.rot.x, prop.rot.y, prop.rot.z, true, true, false, true, 0, true)
@@ -32,7 +34,10 @@ function anim(data)
 end
 
 function spawnTable(data)
-    lib.requestModel(data.prop)
+    RequestModel(data.prop)
+    while not HasModelLoaded(data.prop) do
+        Wait(0)
+    end
     local newTable = CreateObject(GetHashKey(data.prop), data.pos.x, data.pos.y, data.pos.z, false, false, false)
     SetEntityHeading(newTable, data.pos.w)
     FreezeEntityPosition(newTable, true)
@@ -46,7 +51,6 @@ function DespawnTable(id)
     SpawnedTables[id] = nil
 end
   
-
 AddEventHandler('onResourceStop', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
         return
