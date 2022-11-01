@@ -2,4 +2,5 @@
  A simple crafting system for ox_inventory
 
 
-# For more info visit our [discord server](https://discord.gg/Mnw4ES8gH7)
+# Our Discord
+[Discord Server](https://discord.gg/Mnw4ES8gH7)
