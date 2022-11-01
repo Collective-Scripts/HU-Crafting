@@ -51,7 +51,7 @@ Config.Crafting = {
                 [2] = {
                     blueprint_data = { -- [If you want to disable this feature, set this to false.] --
                         enable = false,
-                        item = 'blueprint_carbinerifle',
+                        item = 'blueprint_pistol50',
                         qyt = 1
                     },
                     craft_time = 5000, -- [Change this if you use 'ox-circle' or 'ox-progress'.]

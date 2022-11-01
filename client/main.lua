@@ -305,6 +305,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
             end
             if not success then
                 isCrafting = false
+                CollectiveC.Notification(3, 'Failed.')
                 if data.craft_table then
                     DeleteObject(createObject)
                 end
