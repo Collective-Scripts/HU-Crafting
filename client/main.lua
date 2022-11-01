@@ -1,5 +1,10 @@
 local ox_inventory = exports.ox_inventory
 local isCrafting = false
+local libLoaded = false
+
+if GetResourceState('ox_lib') == 'started' then
+    libLoaded = true
+end
 
 local function Craft(data)
     local SendMenu = {}
@@ -166,62 +171,68 @@ AddEventHandler('HU-Crafting:Craft', function(data)
             })
             SetEntityHeading(PlayerPedId(), data.craft_anim.heading)
             if data.craft_type == 'ox-skillbar' then
-                success = startMinigame({
-                    game = data.craft_type_data,
-                    dict = data.craft_anim.dict,
-                    clip = data.craft_anim.clip,
-                    flag = data.craft_anim.flag,
-                    model = data.craft_object.attach_object,
-                    pos = data.craft_object.attach_pos,
-                    rot = data.craft_object.attach_rot,
-                    bone = data.craft_object.attach_bone
-                }) 
+                if libLoaded then
+                    success = startMinigame({
+                        game = data.craft_type_data,
+                        dict = data.craft_anim.dict,
+                        clip = data.craft_anim.clip,
+                        flag = data.craft_anim.flag,
+                        model = data.craft_object.attach_object,
+                        pos = data.craft_object.attach_pos,
+                        rot = data.craft_object.attach_rot,
+                        bone = data.craft_object.attach_bone
+                    })
+                end
             elseif data.craft_type == 'ox-circle' then
-                success = lib.progressCircle({
-                    duration = data.craft_time,
-                    position = 'middle',
-                    useWhileDead = false,
-                    canCancel = false,
-                    disable = {
-                        car = true,
-                        move = true,
-                        combat = true
-                    },
-                    anim = {
-                        dict = data.craft_anim.dict,
-                        clip = data.craft_anim.clip,
-                        flag = data.craft_anim.flag,
-                    },
-                    prop = {
-                        model = data.craft_object.attach_object,
-                        pos = data.craft_object.attach_pos,
-                        rot = data.craft_object.attach_rot,
-                        bone = data.craft_object.attach_bone
-                    }
-                })
+                if libLoaded then
+                    success = lib.progressCircle({
+                        duration = data.craft_time,
+                        position = 'middle',
+                        useWhileDead = false,
+                        canCancel = false,
+                        disable = {
+                            car = true,
+                            move = true,
+                            combat = true
+                        },
+                        anim = {
+                            dict = data.craft_anim.dict,
+                            clip = data.craft_anim.clip,
+                            flag = data.craft_anim.flag,
+                        },
+                        prop = {
+                            model = data.craft_object.attach_object,
+                            pos = data.craft_object.attach_pos,
+                            rot = data.craft_object.attach_rot,
+                            bone = data.craft_object.attach_bone
+                        }
+                    })
+                end
             elseif data.craft_type == 'ox-progress' then
-                success  = lib.progressBar({
-                    duration = data.craft_time,
-                    label = 'Crafting '..data.output_label,
-                    useWhileDead = false,
-                    canCancel = false,
-                    disable = {
-                        car = true,
-                        move = true,
-                        combat = true
-                    },
-                    anim = {
-                        dict = data.craft_anim.dict,
-                        clip = data.craft_anim.clip,
-                        flag = data.craft_anim.flag,
-                    },
-                    prop = {
-                        model = data.craft_object.attach_object,
-                        pos = data.craft_object.attach_pos,
-                        rot = data.craft_object.attach_rot,
-                        bone = data.craft_object.attach_bone
-                    }
-                })
+                if libLoaded then
+                    success  = lib.progressBar({
+                        duration = data.craft_time,
+                        label = 'Crafting '..data.output_label,
+                        useWhileDead = false,
+                        canCancel = false,
+                        disable = {
+                            car = true,
+                            move = true,
+                            combat = true
+                        },
+                        anim = {
+                            dict = data.craft_anim.dict,
+                            clip = data.craft_anim.clip,
+                            flag = data.craft_anim.flag,
+                        },
+                        prop = {
+                            model = data.craft_object.attach_object,
+                            pos = data.craft_object.attach_pos,
+                            rot = data.craft_object.attach_rot,
+                            bone = data.craft_object.attach_bone
+                        }
+                    })
+                end
             end
             if not success then
                 isCrafting = false
@@ -254,7 +265,7 @@ CreateThread(function()
         if data.CraftData.craft_table then
             local box = lib.zones.box({
                 coords = vec3(data.CraftData.craft_table_coords.x, data.CraftData.craft_table_coords.y, data.CraftData.craft_table_coords.z),
-                size = vec3(5, 5, 5),
+                size = vec3(10, 10, 5),
                 rotation = data.CraftData.craft_table_coords.w,
                 debug = false,
                 onEnter = onEnter,
