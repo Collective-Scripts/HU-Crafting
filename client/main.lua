@@ -10,7 +10,7 @@ local function Craft(data)
     if data.ContextMenu == 'ox_lib' then
         for i = 1, #data.Craft do
             local theData = data.Craft[i] 
-            table.insert(SendMenu,{
+            SendMenu[#SendMenu + 1] = {
                 title = theData.output_label,
                 description = 'Requirements',
                 event = 'HU-Crafting:Craft',
@@ -33,7 +33,7 @@ local function Craft(data)
                     output_label = theData.output_label,
                     craft_object = theData.craft_object
                 }
-            })
+            }
         end
         lib.registerContext({
             id = data.CraftID,
@@ -112,7 +112,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
                     event = 'HU-Crafting:Craft',
                     args = {
                         method = 'craft',
-                        context = context,
+                        craft_context = context,
                         heading = data.craft_table_coords,
                         blueprint_data = data.blueprint_data,
                         craft_table_coords = data.craft_table_coords,
@@ -155,7 +155,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
                 event = 'HU-Crafting:Craft',
                 args = {
                     method = 'craft',
-                    context = context,
+                    craft_context = context,
                     heading = data.craft_table_coords,
                     craft_table_coords = data.craft_table_coords,
                     blueprint_data = data.blueprint_data,
@@ -214,10 +214,10 @@ AddEventHandler('HU-Crafting:Craft', function(data)
         elseif context == 'ox_lib' then
             local SendMenu = {}
             for k,v in pairs(data.input_items) do
-                table.insert(SendMenu,{
+                SendMenu[#SendMenu + 1] = {
                     title = v.label..' '..v.value..'x',
-                    description = 'Requirement #'..k,
-                })
+                    description = 'Requirement #'..k
+                }
             end
             lib.registerContext({
                 id = 'cfx_hu_requirements',
@@ -227,7 +227,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
             lib.showContext('cfx_hu_requirements')
         end
     elseif method == 'craft' then
-        if context == 'esx_context' then ESX.CloseContext() end
+        if data.craft_context == 'esx_context' then ESX.CloseContext() end
         if HasItem(data.input_items, data.blueprint_data) then
             local success = false
             local createObject = nil
