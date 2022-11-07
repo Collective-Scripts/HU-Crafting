@@ -2,7 +2,7 @@ fx_version 'cerulean'
 games { 'rdr3', 'gta5' }
 author 'Collective'
 description 'A simple crafting system for ox_inventory'
-version '1.0'
+version '1.1'
 lua54 'yes'
 shared_scripts{
     '@es_extended/imports.lua',
