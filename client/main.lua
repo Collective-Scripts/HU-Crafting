@@ -51,7 +51,7 @@ local function Craft(data)
         }
         for i = 1, #data.Craft do
             local theData = data.Craft[i] 
-            table.insert(SendMenu,{
+            SendMenu[#SendMenu + 1] = {
                 icon="fa-solid fa-box",
                 title = theData.output_label,
                 description = 'Requirements',
@@ -72,7 +72,7 @@ local function Craft(data)
                     output_label = theData.output_label,
                     craft_object = theData.craft_object
                 }
-            })
+            }
         end
         ESX.OpenContext("right" , SendMenu, function(menu, element) -- On Select Function
             TriggerEvent(element.event, element.args)
@@ -197,12 +197,12 @@ AddEventHandler('HU-Crafting:Craft', function(data)
                 },
             }
             for k,v in pairs(data.input_items) do
-                table.insert(SendMenu,{
+                SendMenu[#SendMenu + 1] = {
                     icon="fa-solid fa-list",
                     title = v.label..' '..v.value..'x',
                     description = 'Requirement #'..k,
-                    disabled=true,
-                })
+                    disabled=true
+                }
             end
             SendMenu[#SendMenu + 1] = {
                 icon="fa-regular fa-circle-xmark",
