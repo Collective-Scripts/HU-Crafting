@@ -112,6 +112,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
                     event = 'HU-Crafting:Craft',
                     args = {
                         method = 'craft',
+                        context = context,
                         heading = data.craft_table_coords,
                         blueprint_data = data.blueprint_data,
                         craft_table_coords = data.craft_table_coords,
@@ -154,6 +155,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
                 event = 'HU-Crafting:Craft',
                 args = {
                     method = 'craft',
+                    context = context,
                     heading = data.craft_table_coords,
                     craft_table_coords = data.craft_table_coords,
                     blueprint_data = data.blueprint_data,
@@ -225,7 +227,7 @@ AddEventHandler('HU-Crafting:Craft', function(data)
             lib.showContext('cfx_hu_requirements')
         end
     elseif method == 'craft' then
-        ESX.CloseContext()
+        if context == 'esx_context' then ESX.CloseContext() end
         if HasItem(data.input_items, data.blueprint_data) then
             local success = false
             local createObject = nil
