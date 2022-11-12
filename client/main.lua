@@ -1,6 +1,23 @@
 local ox_inventory = exports.ox_inventory
 local isInZone, libLoaded, isCrafting, Key = false, false, false, nil
 
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+	ESX.PlayerData = xPlayer
+	ESX.PlayerLoaded = true
+end)
+
+RegisterNetEvent('esx:onPlayerLogout')
+AddEventHandler('esx:onPlayerLogout', function()
+	ESX.PlayerLoaded = false
+	ESX.PlayerData = {}
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+	ESX.PlayerData.job = job
+end)
+
 if GetResourceState('ox_lib') == 'started' then
     libLoaded = true
 end
@@ -331,37 +348,41 @@ AddEventHandler('HU-Crafting:Craft', function(data)
 end)
 
 function onEnter(self)
-    if self.method == 'table' then
-        spawnTable({
-            prop = self.prop,
-            pos = vec4(self.pos.x, self.pos.y, self.pos.z - 2.2, self.pos.w),
-            id = self.key
-        })
-    elseif self.method == 'text' then
-        isInZone = true
-        Key = self.key
-        if self.text == 'ox_lib' then
-            lib.showTextUI('[E] - Craft', {icon = 'fas fa-wrench'})
-        elseif self.text == 'ps-ui' then
-            exports['ps-ui']:DisplayText("[E] Craft", "primary")
-        elseif self.text == 'esx_textui' then
-            ESX.TextUI("[E] Craft", "info")
+    if ESX.PlayerData.job.name == self.Job or not self.Job then
+        if self.method == 'table' then
+            spawnTable({
+                prop = self.prop,
+                pos = vec4(self.pos.x, self.pos.y, self.pos.z - 2.2, self.pos.w),
+                id = self.key
+            })
+        elseif self.method == 'text' then
+            isInZone = true
+            Key = self.key
+            if self.text == 'ox_lib' then
+                lib.showTextUI('[E] - Craft', {icon = 'fas fa-wrench'})
+            elseif self.text == 'ps-ui' then
+                exports['ps-ui']:DisplayText("[E] Craft", "primary")
+            elseif self.text == 'esx_textui' then
+                ESX.TextUI("[E] Craft", "info")
+            end
         end
     end
 end
 
 function onExit(self)
-    if self.method == 'table' then
-        DespawnTable(self.key)
-    elseif self.method == 'text' then
-        isInZone = false
-        Key = nil
-        if self.text == 'ox_lib' then
-            lib.hideTextUI()
-        elseif self.text == 'ps-ui' then
-            exports['ps-ui']:HideText()
-        elseif self.text == 'esx_textui' then
-            ESX.HideUI()
+    if ESX.PlayerData.job.name == self.Job or not self.Job then
+        if self.method == 'table' then
+            DespawnTable(self.key)
+        elseif self.method == 'text' then
+            isInZone = false
+            Key = nil
+            if self.text == 'ox_lib' then
+                lib.hideTextUI()
+            elseif self.text == 'ps-ui' then
+                exports['ps-ui']:HideText()
+            elseif self.text == 'esx_textui' then
+                ESX.HideUI()
+            end
         end
     end
 end
@@ -380,7 +401,8 @@ CreateThread(function()
                 method = 'table',
                 prop = data.CraftData.craft_table,
                 pos = data.CraftData.craft_table_coords,
-                key = i
+                key = i,
+                Job = data.CraftData.Job
             })
             lib.zones.box({
                 coords = vec3(data.CraftData.craft_table_coords.x, data.CraftData.craft_table_coords.y, data.CraftData.craft_table_coords.z),
@@ -391,7 +413,21 @@ CreateThread(function()
                 onExit = onExit,
                 method = 'text',
                 text = data.CraftData.TextUI,
-                key = i
+                key = i,
+                Job = data.CraftData.Job
+            })
+        else
+            lib.zones.box({
+                coords = vec3(data.CraftData.craft_table_coords.x, data.CraftData.craft_table_coords.y, data.CraftData.craft_table_coords.z),
+                size = vec3(1, 1, 2),
+                rotation = data.CraftData.craft_table_coords.w,
+                debug = false,
+                onEnter = onEnter,
+                onExit = onExit,
+                method = 'text',
+                text = data.CraftData.TextUI,
+                key = i,
+                Job = data.CraftData.Job
             })
         end
     end
